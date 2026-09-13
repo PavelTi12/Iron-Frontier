@@ -1,0 +1,396 @@
+/* ==========================================================================
+   ЖЕЛЕЗНЫЙ РУБЕЖ · layout.css
+   --------------------------------------------------------------------------
+   Каркас страницы: шапка, подвал, шапка внутренней страницы, секции.
+
+   Содержание:
+     1. Секции — вертикальный ритм
+     2. Шапка: раскладка
+     3. Шапка: логотип, меню, контакты
+     4. Шапка: вариант поверх фотографии (главная)
+     5. Шапка: бургер и адаптив
+     6. Шапка страницы: крошки + H1
+     7. Подвал
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Секции
+   В макете расстояние между секциями 100–110 px, между заголовком
+   секции и её содержимым — 36 px.
+   -------------------------------------------------------------------------- */
+
+.section {
+  padding-block: var(--space-section);
+}
+
+/* Две секции подряд не складывают отступы */
+.section + .section {
+  padding-top: 0;
+}
+
+/* Секция, идущая сразу за шапкой страницы (крошки + H1) */
+.section--after-head {
+  padding-top: 0;
+}
+
+/* Шапка секции: заголовок слева, ссылка «Перейти в каталог» справа */
+.section__head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem var(--gap-grid);
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--space-head);
+}
+
+.section__head .lead {
+  /* flex: 0 0 — иначе строка сжимается и встаёт рядом с заголовком */
+  flex: 0 0 100%;
+  margin-top: calc(var(--space-head) * -0.35);
+}
+
+/* --------------------------------------------------------------------------
+   2. Шапка: раскладка
+   Одна строка: логотип · меню · телефон и соцсети · кнопка.
+   Высота контентной строки — 72 px (равна высоте кнопки).
+   -------------------------------------------------------------------------- */
+
+.header {
+  position: relative;
+  z-index: 10;
+  padding-block: clamp(0.75rem, 0.45rem + 1.2vw, 3rem)
+    clamp(0.75rem, 0.45rem + 1.2vw, 2rem);
+}
+
+.header__inner {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.75rem, 0.1rem + 2.6vw, 3.5rem);
+}
+
+/* --------------------------------------------------------------------------
+   3. Шапка: логотип, меню, контакты
+   -------------------------------------------------------------------------- */
+
+.logo {
+  flex: 0 0 auto;
+  font-size: var(--fs-logo);
+  font-weight: var(--fw-bold);
+  line-height: 1.16;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+}
+
+.logo span {
+  display: block;
+}
+
+.header__nav {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.75rem, 0.2rem + 1.5vw, 1.875rem);
+  font-size: var(--fs-ui);
+  text-transform: uppercase;
+}
+
+.nav a {
+  padding-block: 0.15em;
+  border-bottom: var(--bw) solid transparent;
+  transition: border-color var(--transition);
+}
+
+.nav a:hover,
+.nav a:focus-visible,
+.nav a[aria-current='page'] {
+  border-bottom-color: currentColor;
+}
+
+/* Телефон и соцсети: правый край выровнен по правому краю блока */
+.header__contact {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.header__phone {
+  font-size: var(--fs-phone);
+  font-weight: var(--fw-medium);
+  white-space: nowrap;
+}
+
+.header__cta {
+  flex: 0 0 auto;
+}
+
+/* Иконка телефона — показывается вместо номера на узких экранах */
+.header__phone-icon {
+  display: none;
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+/* --------------------------------------------------------------------------
+   4. Шапка поверх фотографии (главная страница)
+   Прозрачный фон, белый текст, кнопка в обводке. Ложится на фото героя,
+   не занимая места в потоке.
+   -------------------------------------------------------------------------- */
+
+@media (min-width: 768px) {
+  .header--on-photo {
+    position: absolute;
+    inset: 0 0 auto;
+    color: var(--c-on-photo);
+  }
+
+  .header--on-photo .burger span,
+  .header--on-photo .burger span::before,
+  .header--on-photo .burger span::after {
+    background: var(--c-on-photo);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   5. Шапка: бургер и адаптив
+   Меню целиком не помещается вместе с телефоном и кнопкой уже при 1440,
+   поэтому ниже этой ширины оно уходит под бургер. Переключатель —
+   скрытый чекбокс, без JavaScript.
+   -------------------------------------------------------------------------- */
+
+.nav-toggle {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.burger {
+  display: none;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  cursor: pointer;
+}
+
+.burger span,
+.burger span::before,
+.burger span::after {
+  display: block;
+  width: 1.625rem;
+  height: 2px;
+  background: currentColor;
+}
+
+.burger span {
+  position: relative;
+}
+
+.burger span::before,
+.burger span::after {
+  content: '';
+  position: absolute;
+  left: 0;
+}
+
+.burger span::before { top: -0.5rem; }
+.burger span::after  { top:  0.5rem; }
+
+@media (min-width: 1440px) {
+  .nav {
+    flex-wrap: nowrap;
+  }
+}
+
+/* Промежуточные ширины: меню помещается, но плотнее */
+@media (min-width: 1440px) and (max-width: 1699px) {
+  .header__inner { gap: 1.5rem; }
+  .nav { gap: 1rem; font-size: 1.0625rem; }
+  .header__phone { font-size: 1.125rem; }
+  .header__cta .btn { padding-inline: 1.5rem; font-size: 1.0625rem; }
+}
+
+@media (max-width: 1439px) {
+  .header__inner {
+    flex-wrap: wrap;
+    row-gap: 1rem;
+  }
+
+  .burger        { display: flex; order: 3; }
+  .header__contact { order: 2; margin-left: auto; }
+  .header__cta   { order: 4; flex-basis: 100%; }
+  .header__nav   { order: 5; flex-basis: 100%; display: none; }
+
+  .header__cta .btn { width: 100%; }
+
+  /* Раскрытие меню: чекбокс стоит перед .header__inner */
+  .nav-toggle:checked + .header__inner .header__nav {
+    display: block;
+  }
+
+  .nav {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding-block: 0.5rem 0.25rem;
+  }
+}
+
+/* Мобильная шапка: синяя плашка во всю ширину, логотип и две иконки.
+   Номер телефона и кнопка «Оставить заявку» из шапки убраны — как в макете. */
+@media (max-width: 767px) {
+  .header,
+  .header--on-photo {
+    position: static;
+    padding-block: clamp(0.75rem, 0.6rem + 0.7vw, 1rem);
+    background: var(--c-primary);
+    color: var(--c-on-primary);
+  }
+
+  .header__inner {
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .header__contact { order: 2; }
+  .burger          { order: 3; width: 2.25rem; }
+  .header__cta     { display: none; }
+
+  .header__phone      { display: none; }
+  .header__phone-icon { display: block; }
+
+  .header__contact .socials { display: none; }
+}
+
+/* --------------------------------------------------------------------------
+   6. Шапка внутренней страницы: крошки + H1
+   В макете: крошки на y = 222, H1 на y = 277 (разница 36–55).
+   -------------------------------------------------------------------------- */
+
+.page-head {
+  padding-block: clamp(1.5rem, 1.05rem + 2.2vw, 3.75rem) var(--space-head);
+}
+
+.crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  font-size: var(--fs-small);
+  color: var(--c-muted);
+  text-transform: uppercase;
+}
+
+.crumbs li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.crumbs li + li::before {
+  content: '›';
+  font-size: 1.15em;
+  line-height: 1;
+}
+
+.crumbs a:hover,
+.crumbs a:focus-visible {
+  color: var(--c-ink);
+}
+
+.crumbs svg {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.page-head .h1 {
+  margin-top: var(--space-head);
+}
+
+/* --------------------------------------------------------------------------
+   7. Подвал
+   Пять колонок в контейнере 1720. Левые края в макете:
+   100 · 683 · 935 · 1191 · 1568 — отсюда пропорции fr ниже.
+   -------------------------------------------------------------------------- */
+
+.footer {
+  padding-block: clamp(2.25rem, 1.7rem + 2.5vw, 5rem)
+    clamp(2.25rem, 1.7rem + 2.8vw, 5.625rem);
+  background: var(--c-primary);
+  color: var(--c-on-primary);
+}
+
+.footer__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(1.75rem, 1.4rem + 1.6vw, 2.5rem) var(--gap-grid);
+}
+
+@media (min-width: 640px) {
+  .footer__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .footer__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Пять колонок, как в макете. Ниже 1280 последней колонке не хватает
+   места под номер телефона, поэтому раскладка включается с 1280. */
+@media (min-width: 1280px) {
+  .footer__grid {
+    grid-template-columns:
+      minmax(0, 1.70fr) minmax(0, 0.75fr) minmax(0, 0.75fr)
+      minmax(0, 1.15fr) minmax(0, 1.05fr);
+  }
+}
+
+.footer .logo {
+  margin-bottom: clamp(1rem, 0.85rem + 0.9vw, 1.875rem);
+}
+
+.footer__legal {
+  font-size: var(--fs-small);
+  line-height: 1.6;
+}
+
+.footer__copy {
+  margin-top: clamp(1rem, 0.85rem + 0.9vw, 1.875rem);
+  font-size: var(--fs-small);
+}
+
+.footer__title {
+  margin-bottom: clamp(0.875rem, 0.7rem + 1.0vw, 1.75rem);
+  font-size: var(--fs-ui);
+  font-weight: var(--fw-medium);
+  text-transform: uppercase;
+}
+
+.footer__links {
+  display: grid;
+  gap: clamp(0.625rem, 0.5rem + 0.8vw, 1.3125rem);
+}
+
+.footer__links a:hover,
+.footer__links a:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+.footer .socials {
+  margin-top: clamp(1rem, 0.85rem + 0.9vw, 1.875rem);
+}

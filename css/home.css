@@ -1,0 +1,339 @@
+/* ==========================================================================
+   ЖЕЛЕЗНЫЙ РУБЕЖ · home.css
+   --------------------------------------------------------------------------
+   Блоки, которые встречаются только на главной, плюс раскладка страниц
+   каталога и портфолио (боковое меню + сетка карточек).
+
+   Содержание:
+     1. Герой
+     2. Схема работы (4 шага на диагональной линии)
+     3. Блок «Есть готовые чертежи?»
+     4. Секция с формой и фотографией
+     5. Карта
+     6. Каталог и портфолио: боковое меню + сетка
+     7. Карточка товара и проекта: две колонки
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Герой
+   Макет: фото во всю ширину, высота 1002. Шапка лежит поверх фото
+   (см. .header--on-photo в layout.css). H1 60/70, кнопка 234 × 58.
+   -------------------------------------------------------------------------- */
+
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: clamp(26rem, 14rem + 40vw, 62.625rem);   /* 416 → 1002 */
+  padding-block: clamp(3rem, 1rem + 8vw, 9rem);
+  overflow: hidden;
+  isolation: isolate;
+  color: var(--c-on-photo);
+}
+
+.hero__media,
+.hero__media img {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Затемнение, чтобы белый текст читался на любом кадре */
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    90deg,
+    rgb(0 0 0 / 0.62) 0%,
+    rgb(0 0 0 / 0.42) 55%,
+    rgb(0 0 0 / 0.25) 100%
+  );
+}
+
+/* Фон-заглушка: виден, пока в webp нет фотографии героя */
+.hero--placeholder {
+  background: linear-gradient(135deg, #2b2f36 0%, #14171c 100%);
+}
+
+.hero__inner {
+  /* В макете заголовок занимает 1042 px и ложится в три строки */
+  max-width: min(100%, 66rem);
+}
+
+.hero__action {
+  margin-top: clamp(1.5rem, 1rem + 2.2vw, 3.75rem);
+}
+
+/* Кнопка героя в макете уже основной: 234 × 58 */
+.hero__action .btn {
+  min-height: clamp(3rem, 2.8rem + 0.8vw, 3.625rem);
+  padding-inline: clamp(1.5rem, 1.2rem + 1.6vw, 2.75rem);
+  font-size: var(--fs-body);
+}
+
+/* --------------------------------------------------------------------------
+   2. Схема работы
+   Макет: четыре шага, каждый следующий на 76 px ниже предыдущего;
+   под ними диагональная синяя линия с четырьмя точками.
+
+   На ширинах меньше 1024 диагональ теряет смысл: шаги встают в столбец,
+   линия и точки скрываются — так же, как в мобильном фрейме.
+   -------------------------------------------------------------------------- */
+
+.steps {
+  position: relative;
+}
+
+.steps__list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-block);
+}
+
+.step {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.step__head {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.step__icon {
+  flex: 0 0 auto;
+  width: clamp(1.5rem, 1.35rem + 0.7vw, 2rem);
+  height: clamp(1.5rem, 1.35rem + 0.7vw, 2rem);
+  color: var(--c-primary);
+}
+
+.step__title {
+  margin: 0;
+  font-size: var(--fs-ui);
+  font-weight: var(--fw-semibold);
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.step__text {
+  font-size: var(--fs-small);
+  line-height: var(--lh-dense);
+}
+
+/* Линия и точки существуют только на десктопе */
+.steps__line,
+.steps__dot {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .steps {
+    /* Высота блока в макете — 442 px при четырёх шагах */
+    min-height: 27.625rem;
+  }
+
+  .steps__list {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0 clamp(1rem, -0.5rem + 2vw, 1.5rem);
+    align-items: start;
+  }
+
+  /* Ступенчатый сдвиг: каждый следующий шаг ниже на 76 px */
+  .steps__list > li:nth-child(2) { margin-top: 4.75rem; }
+  .steps__list > li:nth-child(3) { margin-top: 9.5rem; }
+  .steps__list > li:nth-child(4) { margin-top: 14.25rem; }
+
+  /* Текст шага в макете уже колонки, чтобы не наезжать на соседний */
+  .step__text {
+    max-width: 22rem;
+  }
+
+  .steps__line {
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Точки на линии. Позиции в процентах совпадают с концами линии,
+     поэтому остаются на ней при любой ширине контейнера. */
+  .steps__dot {
+    display: block;
+    position: absolute;
+    width: 1.25rem;
+    height: 1.25rem;
+    background: var(--c-primary);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .steps__dot:nth-of-type(1) { left: 0.7%;  top: 46.4%; }
+  .steps__dot:nth-of-type(2) { left: 33.0%; top: 63.1%; }
+  .steps__dot:nth-of-type(3) { left: 66.0%; top: 80.3%; }
+  .steps__dot:nth-of-type(4) { left: 99.0%; top: 97.3%; }
+}
+
+/* --------------------------------------------------------------------------
+   3. Блок «Есть готовые чертежи?»
+   Макет: текст слева (540), фото справа (995 × 438), промежуток 186.
+   -------------------------------------------------------------------------- */
+
+.drawings {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-block);
+  align-items: center;
+}
+
+@media (min-width: 900px) {
+  .drawings {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.84fr);
+    column-gap: clamp(2rem, -3rem + 9.7vw, 11.625rem);
+  }
+}
+
+.drawings__group + .drawings__group {
+  margin-top: var(--space-block);
+}
+
+.drawings__group .h2 {
+  margin-bottom: 0.75rem;
+}
+
+.drawings__action {
+  margin-top: var(--space-block);
+  max-width: 22rem;
+}
+
+.drawings__media img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 995 / 438;
+  object-fit: cover;
+}
+
+/* В мобильном фрейме фото стоит после кнопки */
+@media (max-width: 899px) {
+  .drawings__media { order: 2; }
+}
+
+/* --------------------------------------------------------------------------
+   4. Секция с формой и фотографией
+   Макет: форма слева (940), фото справа (704), промежуток 77.
+   -------------------------------------------------------------------------- */
+
+.contact-section {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-block);
+  align-items: stretch;
+}
+
+@media (min-width: 900px) {
+  .contact-section {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.75fr);
+    column-gap: clamp(2rem, -1rem + 5vw, 4.8125rem);
+  }
+}
+
+.contact-section__media img {
+  width: 100%;
+  height: 100%;
+  min-height: 16rem;
+  object-fit: cover;
+}
+
+/* --------------------------------------------------------------------------
+   5. Карта
+   Макет: во всю ширину экрана, высота 431 на десктопе и почти
+   квадрат на мобайле — кадрируем через object-fit.
+   -------------------------------------------------------------------------- */
+
+.map {
+  width: 100%;
+}
+
+.map img,
+.map iframe {
+  width: 100%;
+  height: clamp(18rem, 10rem + 26vw, 26.9375rem);   /* 288 → 431 */
+  border: 0;
+  object-fit: cover;
+}
+
+/* Заглушка, пока нет статичной картинки карты */
+.map--placeholder {
+  display: grid;
+  place-items: center;
+  height: clamp(18rem, 10rem + 26vw, 26.9375rem);
+  background: repeating-linear-gradient(
+      45deg,
+      #eef1f6 0 12px,
+      #e6eaf2 12px 24px
+    );
+  color: var(--c-muted);
+  font-size: var(--fs-small);
+  text-align: center;
+}
+
+/* --------------------------------------------------------------------------
+   6. Каталог и портфолио
+   Макет: боковое меню 416, три карточки по 410 с промежутком 28.
+   -------------------------------------------------------------------------- */
+
+.catalog {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-block) var(--gap-grid);
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .catalog {
+    grid-template-columns: minmax(0, 416fr) minmax(0, 1284fr);
+    column-gap: clamp(1rem, -0.5rem + 1.6vw, 1.1875rem);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   7. Карточка товара и проекта: две колонки
+   Макет: текст слева (~740), галерея справа (~830).
+   -------------------------------------------------------------------------- */
+
+.product {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-block) clamp(1.5rem, 0.4rem + 4vw, 5.5rem);
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .product {
+    grid-template-columns: minmax(0, 27fr) minmax(0, 32fr);
+  }
+}
+
+.product__sku {
+  margin-top: 0.75rem;
+  font-size: var(--fs-small);
+  color: var(--c-muted);
+  text-transform: uppercase;
+}
+
+.product__intro { margin-top: var(--space-block); }
+.product__more  { margin-top: var(--space-head); }
+
+.product__actions {
+  display: grid;
+  gap: 1rem;
+  max-width: 25rem;
+  margin-top: var(--space-block);
+}

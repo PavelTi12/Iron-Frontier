@@ -1,0 +1,847 @@
+/* ==========================================================================
+   ЖЕЛЕЗНЫЙ РУБЕЖ · components.css
+   --------------------------------------------------------------------------
+   Переиспользуемые блоки. Каждый работает независимо от того, в какой
+   секции стоит, и настраивается только через переменные из tokens.css.
+
+   Содержание:
+      1. Кнопки
+      2. Текстовые действия («Подробнее», «Перейти в каталог»)
+      3. Соцсети
+      4. Плитка категории (фото + затемнение + подпись)
+      5. Карточка проекта
+      6. Карточка документа
+      7. Список с иконками (адрес, режим работы, телефон)
+      8. Формы
+      9. Модальные окна (:target, без JavaScript)
+     10. Боковое меню категорий
+     11. Пагинация
+     12. Табы «Описание / Характеристики»
+     13. Таблица характеристик
+     14. Палитра RAL
+     15. Галерея товара
+     16. Информационная плашка проекта
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Кнопки
+   Макет: основная 267 × 72, текст 22 uppercase, без скруглений.
+   Варианты: --primary (заливка), --outline (обводка синим),
+   --on-photo (обводка белым), --on-primary (обводка белым на синем фоне).
+   -------------------------------------------------------------------------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  min-height: var(--h-control);
+  padding: 0.75rem clamp(1.25rem, 0.85rem + 1.5vw, 2.5rem);
+  border: var(--bw) solid transparent;
+  border-radius: var(--radius);
+  font-size: var(--fs-ui);
+  line-height: 1.2;
+  text-align: center;
+  text-transform: uppercase;
+  transition: background-color var(--transition), color var(--transition),
+    border-color var(--transition);
+}
+
+.btn--primary {
+  background: var(--c-primary);
+  color: var(--c-on-primary);
+}
+
+.btn--primary:hover,
+.btn--primary:focus-visible,
+.btn--primary:active {
+  background: var(--c-primary-dark);
+  border-color: var(--c-primary-dark);
+}
+
+.btn--outline {
+  background: transparent;
+  color: var(--c-primary);
+  border-color: var(--c-primary);
+}
+
+.btn--outline:hover,
+.btn--outline:focus-visible {
+  background: var(--c-primary-dark);
+  color: var(--c-on-primary);
+  border-color: var(--c-primary-dark);
+}
+
+.btn--on-photo {
+  background: transparent;
+  color: var(--c-on-photo);
+  border-color: var(--c-on-photo);
+}
+
+.btn--on-photo:hover,
+.btn--on-photo:focus-visible {
+  background: var(--c-on-photo);
+  color: var(--c-ink);
+}
+
+.btn--on-primary {
+  background: transparent;
+  color: var(--c-on-primary);
+  border-color: var(--c-on-primary);
+}
+
+.btn--on-primary:hover,
+.btn--on-primary:focus-visible {
+  background: var(--c-on-primary);
+  color: var(--c-primary);
+}
+
+/* Модификаторы размера и ширины */
+.btn--sm    { min-height: var(--h-control-sm); }
+.btn--block { width: 100%; }
+
+.btn[aria-disabled='true'],
+.btn:disabled {
+  background: transparent;
+  color: var(--c-hairline);
+  border-color: var(--c-hairline);
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   2. Текстовые действия
+   -------------------------------------------------------------------------- */
+
+.action {
+  display: inline-block;
+  font-size: var(--fs-body);
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+  transition: color var(--transition);
+}
+
+.action:hover,
+.action:focus-visible {
+  color: var(--c-primary);
+}
+
+/* Ссылка справа от заголовка секции */
+.section__head .action {
+  flex: 0 0 auto;
+}
+
+/* --------------------------------------------------------------------------
+   3. Соцсети
+   Круглые иконки 36 × 36 с промежутком 16.
+   -------------------------------------------------------------------------- */
+
+.socials {
+  display: flex;
+  gap: 1rem;
+}
+
+.socials svg,
+.socials img {
+  width: clamp(1.75rem, 1.6rem + 0.6vw, 2.25rem);
+  height: clamp(1.75rem, 1.6rem + 0.6vw, 2.25rem);
+  transition: opacity var(--transition);
+}
+
+.socials a:hover svg,
+.socials a:focus-visible svg {
+  opacity: 0.8;
+}
+
+/* --------------------------------------------------------------------------
+   4. Плитка категории
+   Макет: квадрат 409 × 408, фото на всю плитку, затемнение,
+   белая подпись 22 по центру. Ряд из четырёх, промежуток 28.
+   -------------------------------------------------------------------------- */
+
+.tiles {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--gap-grid);
+}
+
+@media (min-width: 640px) {
+  .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (min-width: 1024px) {
+  .tiles { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+.tile {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.tile img {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tile::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--c-scrim);
+  transition: background-color var(--transition);
+}
+
+.tile:hover::after,
+.tile:focus-visible::after {
+  background: var(--c-scrim-hover);
+}
+
+.tile__title {
+  padding: 1rem;
+  font-size: var(--fs-ui);
+  font-weight: var(--fw-regular);
+  color: var(--c-on-photo);
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/* --------------------------------------------------------------------------
+   5. Карточка проекта
+   Макет: фото 409 × 265, заголовок 20/32 uppercase, подпись с иконкой,
+   синяя кнопка на всю ширину карточки (высота 45).
+   -------------------------------------------------------------------------- */
+
+.cards {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--gap-grid);
+}
+
+@media (min-width: 640px) {
+  .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (min-width: 1024px) {
+  .cards--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .cards--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.75rem, 0.6rem + 0.7vw, 1.375rem);
+}
+
+.card__media {
+  aspect-ratio: 409 / 265;
+  overflow: hidden;
+}
+
+.card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.card:hover .card__media img {
+  transform: scale(1.03);
+}
+
+.card__title {
+  margin: 0;
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-regular);
+  line-height: 1.6;
+  text-transform: uppercase;
+}
+
+/* Подпись «по готовым чертежам» / «разработка на заказ» */
+.card__note {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: var(--fs-small);
+  color: var(--c-muted);
+}
+
+.card__note svg {
+  flex: 0 0 auto;
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Кнопка всегда прижата к низу карточки, чтобы ряд выглядел ровно */
+.card__action {
+  margin-top: auto;
+}
+
+/* Карточка каталога: без подписи, кнопка сразу под названием */
+.card--catalog .card__media { aspect-ratio: 410 / 300; }
+
+/* --------------------------------------------------------------------------
+   6. Карточка документа
+   Макет: 560 × 307, синий фон, превью документа слева, название и
+   кнопка «Скачать» справа. Три в ряд, промежуток 20.
+   -------------------------------------------------------------------------- */
+
+.docs {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(1rem, 0.85rem + 0.7vw, 1.25rem);
+}
+
+@media (min-width: 700px) {
+  .docs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (min-width: 1200px) {
+  .docs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+.doc {
+  display: grid;
+  grid-template-columns: minmax(0, 7.5rem) minmax(0, 1fr);
+  gap: clamp(1rem, 0.8rem + 0.9vw, 1.75rem);
+  padding: clamp(1rem, 0.8rem + 0.9vw, 1.75rem);
+  background: var(--c-primary);
+  color: var(--c-on-primary);
+}
+
+.doc__preview {
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: var(--c-bg);
+}
+
+.doc__preview img,
+.doc__preview svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+.doc__body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.doc__title {
+  margin: 0;
+  font-size: var(--fs-body);
+  font-weight: var(--fw-regular);
+  line-height: 1.4;
+}
+
+/* --------------------------------------------------------------------------
+   7. Список с иконками
+   -------------------------------------------------------------------------- */
+
+.info-list {
+  display: grid;
+  gap: clamp(0.875rem, 0.75rem + 0.7vw, 1.5rem);
+}
+
+.info-list li {
+  display: grid;
+  grid-template-columns: 1.5rem minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: start;
+}
+
+.info-list svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: 0.15em;
+}
+
+/* --------------------------------------------------------------------------
+   8. Формы
+   Макет: метка 22 uppercase, поле в рамке 1 px высотой 56,
+   плейсхолдер серый, кнопка отправки на всю ширину.
+   -------------------------------------------------------------------------- */
+
+.form {
+  display: grid;
+  gap: clamp(1rem, 0.85rem + 0.9vw, 1.75rem);
+}
+
+.form__head {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.form__note {
+  color: var(--c-muted);
+}
+
+.field {
+  display: grid;
+  gap: 0.625rem;
+}
+
+.field__label {
+  font-size: var(--fs-ui);
+  text-transform: uppercase;
+}
+
+.field input[type='text'],
+.field input[type='tel'],
+.field input[type='email'],
+.field textarea {
+  width: 100%;
+  min-height: var(--h-field);
+  padding: 0.75rem clamp(0.75rem, 0.6rem + 0.7vw, 1.5rem);
+  background: var(--c-bg);
+  border: var(--bw) solid var(--c-line);
+  border-radius: var(--radius);
+}
+
+.field textarea {
+  min-height: clamp(7rem, 5.8rem + 4vw, 9.5rem);
+}
+
+.field ::placeholder {
+  color: var(--c-muted);
+  opacity: 1;
+}
+
+/* Поле выбора файла: рамка пунктиром и иконка загрузки справа.
+   Нативный input оставлен на месте, чтобы имя выбранного файла
+   было видно без JavaScript; стилизована только его кнопка. */
+.field__control {
+  position: relative;
+}
+
+.field--file input[type='file'] {
+  width: 100%;
+  min-height: var(--h-field);
+  padding: 0.75rem clamp(3rem, 2.6rem + 1.4vw, 4rem) 0.75rem
+    clamp(0.75rem, 0.6rem + 0.7vw, 1.5rem);
+  color: var(--c-muted);
+  border: var(--bw) dashed var(--c-line);
+  cursor: pointer;
+}
+
+.field--file input[type='file']::file-selector-button {
+  margin-right: 0.5rem;
+  padding: 0;
+  color: var(--c-muted);
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.field__icon {
+  position: absolute;
+  top: 50%;
+  right: clamp(0.75rem, 0.6rem + 0.7vw, 1.5rem);
+  width: 1.5rem;
+  height: 1.5rem;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.field__hint {
+  font-size: var(--fs-small);
+  color: var(--c-muted);
+}
+
+.checkbox {
+  display: grid;
+  grid-template-columns: 1.25rem minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: start;
+}
+
+.checkbox input {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: 0.15em;
+  accent-color: var(--c-primary);
+}
+
+.checkbox a {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+/* --------------------------------------------------------------------------
+   9. Модальные окна
+   Открываются по ссылке #callback / #question через :target,
+   закрываются кликом по фону или крестику. JavaScript не нужен.
+   -------------------------------------------------------------------------- */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: none;
+  padding: clamp(1rem, 0.5rem + 2vw, 3rem);
+  overflow-y: auto;
+  background: rgb(0 0 0 / 0.5);
+}
+
+.modal:target {
+  display: grid;
+  place-items: start center;
+}
+
+/* Прозрачная ссылка на весь фон — закрывает окно */
+.modal__dismiss {
+  position: fixed;
+  inset: 0;
+  cursor: default;
+}
+
+.modal__dialog {
+  position: relative;
+  width: min(100%, 31.25rem);
+  padding: clamp(1.5rem, 1.2rem + 1.6vw, 2.5rem);
+  background: var(--c-bg);
+}
+
+.modal__dialog .h2 {
+  padding-right: 2.5rem;
+}
+
+.modal__close {
+  position: absolute;
+  top: clamp(0.5rem, 0.4rem + 0.7vw, 1rem);
+  right: clamp(0.5rem, 0.4rem + 0.7vw, 1rem);
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+/* --------------------------------------------------------------------------
+   10. Боковое меню категорий
+   Макет: пункт 416 × 51, промежуток 16. Активный — залит синим,
+   остальные — обводка синим.
+   -------------------------------------------------------------------------- */
+
+.side-nav {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+}
+
+.side-nav a {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: clamp(2.75rem, 2.6rem + 0.7vw, 3.1875rem);
+  padding: 0.5rem clamp(0.75rem, 0.6rem + 0.7vw, 1.5rem);
+  border: var(--bw) solid var(--c-primary);
+  font-size: var(--fs-body);
+  text-transform: uppercase;
+  transition: background-color var(--transition), color var(--transition);
+}
+
+.side-nav a:hover,
+.side-nav a:focus-visible {
+  background: var(--c-primary-dark);
+  color: var(--c-on-primary);
+  border-color: var(--c-primary-dark);
+}
+
+.side-nav a[aria-current='true'],
+.side-nav a[aria-current='page'] {
+  background: var(--c-primary);
+  color: var(--c-on-primary);
+}
+
+.side-nav svg {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+/* --------------------------------------------------------------------------
+   11. Пагинация
+   -------------------------------------------------------------------------- */
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: var(--space-block);
+}
+
+.pagination a,
+.pagination span {
+  display: grid;
+  place-items: center;
+  min-width: 2.25rem;
+  min-height: 2.25rem;
+  padding: 0 0.4rem;
+  font-size: var(--fs-body);
+}
+
+.pagination a {
+  border: var(--bw) solid transparent;
+  transition: border-color var(--transition), background-color var(--transition),
+    color var(--transition);
+}
+
+.pagination a:hover,
+.pagination a:focus-visible {
+  border-color: var(--c-primary);
+}
+
+.pagination [aria-current='page'] {
+  background: var(--c-primary);
+  color: var(--c-on-primary);
+}
+
+.pagination svg {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+/* --------------------------------------------------------------------------
+   12. Табы «Описание / Характеристики»
+   Переключение на радиокнопках + :checked, без JavaScript.
+   -------------------------------------------------------------------------- */
+
+.tabs__radio {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.tabs__bar {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  background: var(--c-primary-soft);
+}
+
+.tabs__label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: clamp(2.75rem, 2.4rem + 1.4vw, 3.75rem);
+  padding: 0.5rem 1rem;
+  font-size: var(--fs-ui);
+  text-align: center;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.tabs__panel {
+  display: none;
+  padding-top: var(--space-block);
+}
+
+#tab-desc:checked ~ .tabs__bar [for='tab-desc'],
+#tab-spec:checked ~ .tabs__bar [for='tab-spec'] {
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+}
+
+#tab-desc:checked ~ .tabs__panels #panel-desc,
+#tab-spec:checked ~ .tabs__panels #panel-spec {
+  display: block;
+}
+
+/* --------------------------------------------------------------------------
+   13. Таблица характеристик
+   «Название .......... значение»: точечный лидер рисуется псевдоэлементом
+   у названия, поэтому строка тянется на любую ширину.
+   -------------------------------------------------------------------------- */
+
+.specs {
+  display: grid;
+  gap: clamp(0.75rem, 0.6rem + 0.6vw, 1.25rem);
+}
+
+.specs__row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.specs__key {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: baseline;
+  min-width: 0;
+  color: var(--c-primary);
+}
+
+.specs__key::after {
+  content: '';
+  flex: 1 1 auto;
+  min-width: 1.5rem;
+  margin-left: 0.5rem;
+  transform: translateY(-0.25em);
+  border-bottom: 1px dotted var(--c-ink);
+}
+
+.specs__val {
+  flex: 0 0 auto;
+  margin: 0;
+  text-align: right;
+}
+
+/* --------------------------------------------------------------------------
+   14. Палитра RAL
+   -------------------------------------------------------------------------- */
+
+.palette__head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: clamp(2.75rem, 2.4rem + 1.4vw, 3.75rem);
+  padding: 0.5rem 1rem;
+  background: var(--c-primary-soft);
+  font-size: var(--fs-ui);
+  font-weight: var(--fw-regular);
+  text-transform: uppercase;
+}
+
+.palette__body {
+  display: grid;
+  gap: var(--gap-grid);
+  padding-top: var(--space-block);
+}
+
+@media (min-width: 768px) {
+  .palette__body {
+    grid-template-columns: minmax(0, 14rem) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+.palette__photo {
+  max-width: 16rem;
+}
+
+.palette__photo img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.palette__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(4rem, 1fr));
+  gap: clamp(0.75rem, 0.6rem + 0.7vw, 1.5rem);
+}
+
+@media (min-width: 480px) {
+  .palette__grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+}
+
+.swatch {
+  display: grid;
+  gap: 0.5rem;
+  font-size: var(--fs-small);
+  text-align: center;
+}
+
+.swatch__chip {
+  aspect-ratio: 1 / 1;
+  border: 1px solid rgb(0 0 0 / 0.08);
+}
+
+/* Цвета RAL из макета */
+.swatch__chip--ral1035 { background: #7c7660; }
+.swatch__chip--ral5021 { background: #006462; }
+.swatch__chip--ral6019 { background: #abcfab; }
+.swatch__chip--ral3011 { background: #9a3233; }
+.swatch__chip--ral8004 { background: #8c290c; }
+.swatch__chip--ral7004 { background: #999999; }
+.swatch__chip--ral1015 { background: #f6e1aa; }
+.swatch__chip--ral9006 { background: #b5b3b4; }
+.swatch__chip--ral3009 { background: #641707; }
+.swatch__chip--ral6002 { background: #276232; }
+.swatch__chip--ral6007 { background: #0e4236; }
+
+/* --------------------------------------------------------------------------
+   15. Галерея товара
+   -------------------------------------------------------------------------- */
+
+.gallery {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(0.75rem, 0.6rem + 0.9vw, 1.5rem);
+}
+
+@media (min-width: 640px) {
+  .gallery {
+    grid-template-columns: clamp(5rem, 22%, 12rem) minmax(0, 1fr);
+  }
+}
+
+.gallery__thumbs {
+  display: flex;
+  gap: clamp(0.75rem, 0.6rem + 0.9vw, 1.5rem);
+  overflow-x: auto;
+}
+
+@media (min-width: 640px) {
+  .gallery__thumbs {
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: visible;
+  }
+}
+
+.gallery__thumbs li { flex: 0 0 5.5rem; }
+
+@media (min-width: 640px) {
+  .gallery__thumbs li { flex: initial; }
+}
+
+.gallery__thumbs img,
+.gallery__main img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+/* --------------------------------------------------------------------------
+   16. Информационная плашка проекта (город, тип объекта, этапы)
+   -------------------------------------------------------------------------- */
+
+.factsheet {
+  display: grid;
+  gap: clamp(0.875rem, 0.75rem + 0.7vw, 1.5rem) clamp(1.5rem, 1rem + 2vw, 3rem);
+  padding: clamp(1.25rem, 1rem + 1.4vw, 2.5rem);
+  background: var(--c-primary-soft);
+}
+
+@media (min-width: 640px) {
+  .factsheet { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+.factsheet div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.factsheet dt { font-weight: var(--fw-medium); }
+.factsheet dd { margin: 0; }

@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Железный рубеж — металлоконструкции под заказ в Минске</title>
+  <meta name="description" content="Проектируем, изготавливаем и монтируем металлоконструкции: навесы, козырьки, ограждения, лавочки, кровля. Работаем по ТЗ и по вашим чертежам.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Порядок подключения важен: tokens задаёт переменные, остальные их используют -->
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/home.css">
+</head>
+<body>
+
+<!-- ==========================================================================
+     НАБОР ИКОНОК
+     Один раз объявляем все иконки, дальше вставляем через <use href="#id">.
+     Так разметка не раздувается повторяющимся SVG.
+     ========================================================================== -->
+<svg class="visually-hidden" aria-hidden="true" focusable="false">
+  <defs>
+
+    <symbol id="i-telegram" viewBox="0 0 36 36">
+      <circle cx="18" cy="18" r="18" fill="#2AABEE"/>
+      <path fill="#fff" d="M8.2 17.6l16-6.2c.8-.3 1.5.2 1.2 1.3l-2.7 12.9c-.2.9-.8 1.1-1.6.7l-4.4-3.3-2.1 2c-.2.2-.4.4-.9.4l.3-4.5 8.2-7.4c.4-.3-.1-.5-.6-.2l-10.1 6.4-3.4-1c-.7-.3-.7-.8.1-1.1z"/>
+    </symbol>
+
+    <symbol id="i-viber" viewBox="0 0 36 36">
+      <circle cx="18" cy="18" r="18" fill="#7360F2"/>
+      <path fill="#fff" d="M22.6 20.4c-.5-.4-1-.7-1.5-1-.6-.4-1.2-.3-1.6.3l-.4.6c-.2.3-.5.3-.8.2-1.6-.7-2.9-1.9-3.6-3.6-.2-.3-.1-.6.2-.8l.6-.4c.6-.4.6-1 .3-1.6-.3-.5-.6-1-1-1.5-.4-.5-.9-.6-1.4-.3-1.5.9-2 2.3-1.5 3.9.9 3.1 3.9 6.1 7 7 1.6.5 3-.1 3.9-1.5.4-.5.3-1-.2-1.3z"/>
+      <path fill="none" stroke="#fff" stroke-width="1.3" stroke-linecap="round" d="M18.4 10.5c3.6 0 6.5 2.9 6.6 6.5"/>
+      <path fill="none" stroke="#fff" stroke-width="1.3" stroke-linecap="round" d="M18.6 13.2c2 .1 3.6 1.7 3.7 3.7"/>
+    </symbol>
+
+    <symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 3h3l2 5-2.5 1.5a12 12 0 0 0 6 6L15 13l5 2v3a2 2 0 0 1-2.2 2A16 16 0 0 1 3 5.2 2 2 0 0 1 5 3z"/>
+    </symbol>
+
+    <symbol id="i-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/>
+      <circle cx="12" cy="10" r="2.5"/>
+    </symbol>
+
+    <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="9"/>
+      <path d="M12 7v5l3.5 2.5"/>
+    </symbol>
+
+    <symbol id="i-doc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M14 3H7a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V7z"/>
+      <path d="M14 3v4h4"/>
+      <path d="M9 12h6M9 16h6"/>
+    </symbol>
+
+    <symbol id="i-pencil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 20h4L20 8l-4-4L4 16z"/>
+      <path d="M14 6l4 4"/>
+    </symbol>
+
+    <symbol id="i-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M4 20h16"/>
+    </symbol>
+
+    <!-- Превью документа: рисуем схематично, пока нет сканов -->
+    <symbol id="i-doc-page" viewBox="0 0 90 120" preserveAspectRatio="xMidYMin slice">
+      <rect width="90" height="120" fill="#fff"/>
+      <g fill="#c9c9c9">
+        <rect x="14" y="14" width="62" height="3"/>
+        <rect x="14" y="24" width="62" height="2"/><rect x="14" y="30" width="62" height="2"/>
+        <rect x="14" y="36" width="48" height="2"/>
+        <rect x="14" y="46" width="62" height="2"/><rect x="14" y="52" width="62" height="2"/>
+        <rect x="14" y="58" width="55" height="2"/>
+        <rect x="14" y="68" width="62" height="2"/><rect x="14" y="74" width="40" height="2"/>
+        <rect x="14" y="86" width="62" height="2"/><rect x="14" y="92" width="62" height="2"/>
+        <rect x="14" y="98" width="30" height="2"/>
+      </g>
+    </symbol>
+
+    <!-- Иконки схемы работы -->
+    <symbol id="i-step-b2b" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="9" width="26" height="17" rx="1"/>
+      <path d="M11 9V6a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v3"/>
+      <path d="M3 16h26"/>
+    </symbol>
+
+    <symbol id="i-step-cycle" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 16a10 10 0 0 1 17-7"/><path d="M23 4v5h-5"/>
+      <path d="M26 16a10 10 0 0 1-17 7"/><path d="M9 28v-5h5"/>
+    </symbol>
+
+    <symbol id="i-step-file" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19 3H8a2 2 0 0 0-2 2v22a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V10z"/>
+      <path d="M19 3v7h7"/>
+    </symbol>
+
+    <symbol id="i-step-award" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="16" cy="13" r="8"/>
+      <path d="M11 20l-3 9 8-4 8 4-3-9"/>
+    </symbol>
+
+  </defs>
+</svg>
+
+
+<!-- ==========================================================================
+     ШАПКА
+     Общий блок для всех страниц. Отличие главной — класс header--on-photo:
+     шапка ложится поверх фотографии героя и становится белой.
+     ========================================================================== -->
+<header class="header header--on-photo">
+  <input class="nav-toggle" type="checkbox" id="nav-toggle" aria-label="Открыть меню">
+
+  <div class="header__inner container">
+
+    <a class="logo" href="index.html" aria-label="Железный рубеж — на главную">
+      <span>Железный</span><span>рубеж</span>
+    </a>
+
+    <label class="burger" for="nav-toggle" title="Меню"><span></span></label>
+
+    <nav class="header__nav" aria-label="Основная навигация">
+      <ul class="nav">
+        <li><a href="catalog.html">Каталог</a></li>
+        <li><a href="portfolio.html">Портфолио</a></li>
+        <li><a href="about.html">О нас</a></li>
+        <li><a href="certificates.html">Сертификаты</a></li>
+        <li><a href="contacts.html">Контакты</a></li>
+      </ul>
+    </nav>
+
+    <div class="header__contact">
+      <a class="header__phone" href="tel:+375293720670">+375&nbsp;(29)&nbsp;372&#8209;06&#8209;70</a>
+      <a class="header__phone-icon" href="tel:+375293720670" aria-label="Позвонить">
+        <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><use href="#i-phone"/></svg>
+      </a>
+      <ul class="socials">
+        <li><a href="https://t.me/" aria-label="Telegram"><svg viewBox="0 0 36 36" aria-hidden="true"><use href="#i-telegram"/></svg></a></li>
+        <li><a href="viber://chat" aria-label="Viber"><svg viewBox="0 0 36 36" aria-hidden="true"><use href="#i-viber"/></svg></a></li>
+      </ul>
+    </div>
+
+    <div class="header__cta">
+      <a class="btn btn--primary" href="#callback">Оставить заявку</a>
+    </div>
+
+  </div>
+</header>
+<!-- /ШАПКА -->
+
+
+<main>
+
+  <!-- ======================================================================
+       ГЕРОЙ
+       Фотография героя в макете есть, но в папку webp она не попала.
+       Чтобы её подключить: положите файл в img/hero.webp, раскомментируйте
+       строку <img> ниже и уберите класс hero--placeholder у секции.
+       ====================================================================== -->
+  <section class="hero hero--placeholder">
+    <!-- <img class="hero__media" src="img/hero.webp" alt="" width="1920" height="1002"> -->
+
+    <div class="container">
+      <div class="hero__inner">
+        <h1 class="h1 h1--hero">Надёжные металлоконструкции для любых задач</h1>
+        <p class="hero__action">
+          <a class="btn btn--on-photo" href="#callback">Узнать больше</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ======================================================================
+       СХЕМА РАБОТЫ
+       Четыре шага по диагонали. Линия и точки — декорация, поэтому скрыты
+       от скринридеров и не показываются на узких экранах.
+       ====================================================================== -->
+  <section class="section" aria-labelledby="steps-title">
+    <h2 class="visually-hidden" id="steps-title">Как мы работаем</h2>
+
+    <div class="container">
+      <div class="steps">
+
+        <ol class="steps__list">
+          <li class="step">
+            <div class="step__head">
+              <svg class="step__icon" viewBox="0 0 32 32" aria-hidden="true"><use href="#i-step-b2b"/></svg>
+              <h3 class="step__title">Работаем с B2B<br>и крупными проектами</h3>
+            </div>
+            <p class="step__text">Берёмся за объекты с объёмами и требованиями бизнеса — от коммерческих площадок до строительных проектов</p>
+          </li>
+
+          <li class="step">
+            <div class="step__head">
+              <svg class="step__icon" viewBox="0 0 32 32" aria-hidden="true"><use href="#i-step-cycle"/></svg>
+              <h3 class="step__title">От разработки<br>до монтажа</h3>
+            </div>
+            <p class="step__text">Сопровождаем проект на всех этапах: проектирование, производство, доставка и установка на объекте</p>
+          </li>
+
+          <li class="step">
+            <div class="step__head">
+              <svg class="step__icon" viewBox="0 0 32 32" aria-hidden="true"><use href="#i-step-file"/></svg>
+              <h3 class="step__title">Изготовление как по ТЗ,<br>так и по вашим чертежам</h3>
+            </div>
+            <p class="step__text">Можем работать по готовой документации или разработать решение под ваши задачи с нуля</p>
+          </li>
+
+          <li class="step">
+            <div class="step__head">
+              <svg class="step__icon" viewBox="0 0 32 32" aria-hidden="true"><use href="#i-step-award"/></svg>
+              <h3 class="step__title">Учитываем требования<br>для тендеров</h3>
+            </div>
+            <p class="step__text">Работаем с учётом нормативов и документации, необходимых для участия в тендерах и строительстве</p>
+          </li>
+        </ol>
+
+        <!-- Диагональ: preserveAspectRatio="none" растягивает линию ровно так же,
+             как блок, поэтому точки ниже остаются точно на ней -->
+        <svg class="steps__line" viewBox="0 0 1720 442" preserveAspectRatio="none" aria-hidden="true">
+          <line x1="12" y1="205" x2="1703" y2="430" stroke="#1d3e94" stroke-width="2"/>
+        </svg>
+        <span class="steps__dot" aria-hidden="true"></span>
+        <span class="steps__dot" aria-hidden="true"></span>
+        <span class="steps__dot" aria-hidden="true"></span>
+        <span class="steps__dot" aria-hidden="true"></span>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ======================================================================
+       КАТЕГОРИИ КАТАЛОГА
+       ====================================================================== -->
+  <section class="section" aria-labelledby="catalog-title">
+    <div class="container">
+
+      <div class="section__head">
+        <h2 class="h2" id="catalog-title">Металлоконструкции, которые<br>мы производим</h2>
+        <a class="action" href="catalog.html">Перейти в каталог</a>
+      </div>
+
+      <ul class="tiles">
+        <li>
+          <a class="tile" href="catalog.html#benches">
+            <img src="img/tile-benches.webp" alt="" loading="lazy">
+            <span class="tile__title">Лавочки и скамейки</span>
+          </a>
+        </li>
+        <li>
+          <a class="tile" href="catalog.html#fences">
+            <img src="img/tile-fences.webp" alt="" loading="lazy">
+            <span class="tile__title">Ограждения и заборы</span>
+          </a>
+        </li>
+        <li>
+          <a class="tile" href="catalog.html#canopies">
+            <img src="img/tile-canopies.webp" alt="" loading="lazy">
+            <span class="tile__title">Навесы и козырьки</span>
+          </a>
+        </li>
+        <li>
+          <a class="tile" href="catalog.html#roofing">
+            <img src="img/tile-roofing.webp" alt="" loading="lazy">
+            <span class="tile__title">Кровля</span>
+          </a>
+        </li>
+      </ul>
+
+    </div>
+  </section>
+
+
+  <!-- ======================================================================
+       ЧЕРТЕЖИ
+       ====================================================================== -->
+  <section class="section" aria-labelledby="drawings-title">
+    <div class="container">
+      <div class="drawings">
+
+        <div>
+          <div class="drawings__group">
+            <h2 class="h2" id="drawings-title">Есть готовые чертежи?</h2>
+            <p>Работаем без задержек и лишних согласований</p>
+          </div>
+
+          <div class="drawings__group">
+            <h2 class="h2">Нет чертежей или есть<br>только идея?</h2>
+            <p>Разработаем конструкцию под<br>вашу задачу</p>
+          </div>
+
+          <p class="drawings__action">
+            <a class="btn btn--outline btn--block btn--sm" href="#callback">Отправить чертёж</a>
+          </p>
+        </div>
+
+        <figure class="drawings__media">
+          <img src="img/drawings.webp" alt="Рабочие чертежи металлоконструкции" width="995" height="438" loading="lazy">
+        </figure>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ======================================================================
+       ПРИМЕРЫ РАБОТ
+       ====================================================================== -->
+  <section class="section" aria-labelledby="works-title">
+    <div class="container">
+
+      <div class="section__head">
+        <h2 class="h2" id="works-title">Примеры работ под заказ</h2>
+        <a class="action" href="portfolio.html">Смотреть больше</a>
+      </div>
+
+      <ul class="cards cards--4">
+        <li>
+          <article class="card">
+            <a class="card__media" href="portfolio-item.html">
+              <img src="img/project-canopy.webp" alt="Ограждение территории складского комплекса" width="409" height="265" loading="lazy">
+            </a>
+            <h3 class="card__title"><a href="portfolio-item.html">Ограждение территории складского комплекса</a></h3>
+            <p class="card__note">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-doc"/></svg>
+              по готовым чертежам
+            </p>
+            <p class="card__action">
+              <a class="btn btn--primary btn--block btn--sm" href="portfolio-item.html">Подробнее</a>
+            </p>
+          </article>
+        </li>
+
+        <li>
+          <article class="card">
+            <a class="card__media" href="portfolio-item.html">
+              <img src="img/project-canopy.webp" alt="Ограждение территории складского комплекса" width="409" height="265" loading="lazy">
+            </a>
+            <h3 class="card__title"><a href="portfolio-item.html">Ограждение территории складского комплекса</a></h3>
+            <p class="card__note">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-pencil"/></svg>
+              разработка на заказ
+            </p>
+            <p class="card__action">
+              <a class="btn btn--primary btn--block btn--sm" href="portfolio-item.html">Подробнее</a>
+            </p>
+          </article>
+        </li>
+
+        <li>
+          <article class="card">
+            <a class="card__media" href="portfolio-item.html">
+              <img src="img/project-canopy.webp" alt="Ограждение территории складского комплекса" width="409" height="265" loading="lazy">
+            </a>
+            <h3 class="card__title"><a href="portfolio-item.html">Ограждение территории складского комплекса</a></h3>
+            <p class="card__note">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-doc"/></svg>
+              по готовым чертежам
+            </p>
+            <p class="card__action">
+              <a class="btn btn--primary btn--block btn--sm" href="portfolio-item.html">Подробнее</a>
+            </p>
+          </article>
+        </li>
+
+        <li>
+          <article class="card">
+            <a class="card__media" href="portfolio-item.html">
+              <img src="img/project-canopy.webp" alt="Ограждение территории складского комплекса" width="409" height="265" loading="lazy">
+            </a>
+            <h3 class="card__title"><a href="portfolio-item.html">Ограждение территории складского комплекса</a></h3>
+            <p class="card__note">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-doc"/></svg>
+              по готовым чертежам
+            </p>
+            <p class="card__action">
+              <a class="btn btn--primary btn--block btn--sm" href="portfolio-item.html">Подробнее</a>
+            </p>
+          </article>
+        </li>
+      </ul>
+
+    </div>
+  </section>
+
+
+  <!-- ======================================================================
+       СЕРТИФИКАТЫ И ДОКУМЕНТЫ
+       ====================================================================== -->
+  <section class="section" aria-labelledby="docs-title">
+    <div class="container">
+
+      <div class="section__head">
+        <h2 class="h2" id="docs-title">Сертификаты и документы</h2>
+        <a class="action" href="certificates.html">Все документы</a>
+        <p class="lead">Работаем в соответствии с нормативами и предоставляем всю необходимую документацию</p>
+      </div>
+
+      <ul class="docs">
+        <li>
+          <article class="doc">
+            <div class="doc__preview">
+              <svg viewBox="0 0 90 120" role="img" aria-label="Превью документа"><use href="#i-doc-page"/></svg>
+            </div>
+            <div class="doc__body">
+              <h3 class="doc__title">Приказ об утверждении типовой формы договора поставки (присоединения) РБ</h3>
+              <a class="btn btn--on-primary btn--sm" href="#" download>Скачать</a>
+            </div>
+          </article>
+        </li>
+        <li>
+          <article class="doc">
+            <div class="doc__preview">
+              <svg viewBox="0 0 90 120" role="img" aria-label="Превью документа"><use href="#i-doc-page"/></svg>
+            </div>
+            <div class="doc__body">
+              <h3 class="doc__title">Приказ об утверждении типовой формы договора поставки (присоединения) РБ</h3>
+              <a class="btn btn--on-primary btn--sm" href="#" download>Скачать</a>
+            </div>
+          </article>
+        </li>
+        <li>
+          <article class="doc">
+            <div class="doc__preview">
+              <svg viewBox="0 0 90 120" role="img" aria-label="Превью документа"><use href="#i-doc-page"/></svg>
+            </div>
+            <div class="doc__body">
+              <h3 class="doc__title">Приказ об утверждении типовой формы договора поставки (присоединения) РБ</h3>
+              <a class="btn btn--on-primary btn--sm" href="#" download>Скачать</a>
+            </div>
+          </article>
+        </li>
+      </ul>
+
+    </div>
+  </section>
+
+
+  <!-- ======================================================================
+       ОБСУДИТЬ ПРОЕКТ
+       ====================================================================== -->
+  <section class="section" aria-labelledby="contact-title">
+    <div class="container">
+      <div class="contact-section">
+
+        <form class="form" method="post" action="#">
+          <div class="form__head">
+            <h2 class="h2" id="contact-title">Обсудить проект</h2>
+            <p class="form__note">Оставьте номер — свяжемся с вами и обсудим задачу</p>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="home-name">Имя <sup>*</sup></label>
+            <input type="text" id="home-name" name="name" placeholder="Иван Иванов" required>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="home-phone">Телефон <sup>*</sup></label>
+            <input type="tel" id="home-phone" name="phone" placeholder="+375 (29) ___-__-__" required>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="home-comment">Комментарий</label>
+            <textarea id="home-comment" name="comment"></textarea>
+          </div>
+
+          <p class="field__hint">* — обязательное к заполнению поле</p>
+
+          <label class="checkbox">
+            <input type="checkbox" name="agree" required>
+            <span>Я подтверждаю, что ознакомлен(а) с <a href="privacy.html">Политикой конфиденциальности</a></span>
+          </label>
+
+          <p><button class="btn btn--primary" type="submit">Жду звонка</button></p>
+        </form>
+
+        <figure class="contact-section__media">
+          <img src="img/contact-truss.webp" alt="Металлическая ферма перекрытия" width="704" height="600" loading="lazy">
+        </figure>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ======================================================================
+       КАРТА
+       В макете это статичная картинка во всю ширину. Положите её в
+       img/map.webp, раскомментируйте <img> и удалите блок-заглушку.
+       ====================================================================== -->
+  <section class="map full-bleed" aria-label="Мы на карте">
+    <!-- <img src="img/map.webp" alt="Офис на карте Минска: ул. Примерная, д. 1" width="1920" height="431" loading="lazy"> -->
+    <div class="map--placeholder">Здесь будет карта — img/map.webp</div>
+  </section>
+
+</main>
+
+
+<!-- ==========================================================================
+     ПОДВАЛ
+     Общий блок для всех страниц.
+     ========================================================================== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+
+      <div>
+        <a class="logo" href="index.html">
+          <span>Железный</span><span>рубеж</span>
+        </a>
+        <p class="footer__legal">
+          ООО «Железный рубеж»<br>
+          ИНН 7701234567 · КПП 770101001<br>
+          ОГРН 1234567890123<br>
+          Юридический адрес: г. Минск, ул. Примерная, д. 1
+        </p>
+        <p class="footer__copy">© 2026 ООО «Железный рубеж». Все права защищены</p>
+      </div>
+
+      <nav aria-labelledby="f-company">
+        <h2 class="footer__title" id="f-company">Компания</h2>
+        <ul class="footer__links">
+          <li><a href="contacts.html">Контакты</a></li>
+          <li><a href="about.html">О нас</a></li>
+          <li><a href="certificates.html">Сертификаты</a></li>
+        </ul>
+      </nav>
+
+      <nav aria-labelledby="f-projects">
+        <h2 class="footer__title" id="f-projects">Проекты</h2>
+        <ul class="footer__links">
+          <li><a href="catalog.html">Каталог</a></li>
+          <li><a href="portfolio.html">Портфолио</a></li>
+        </ul>
+      </nav>
+
+      <nav aria-labelledby="f-info">
+        <h2 class="footer__title" id="f-info">Информация</h2>
+        <ul class="footer__links">
+          <li><a href="privacy.html">Политика конфиденциальности</a></li>
+          <li><a href="cookies.html">Политика обработки файлов Cookies</a></li>
+          <li><a href="sitemap.html">Карта сайта</a></li>
+        </ul>
+      </nav>
+
+      <div>
+        <h2 class="footer__title" id="f-contact">Связь</h2>
+        <ul class="info-list" aria-labelledby="f-contact">
+          <li>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-pin"/></svg>
+            <span>г. Минск, ул. Примерная, д. 1</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-clock"/></svg>
+            <span>Время работы<br>Пн–Пт: 9:00–18:00<br>Сб–Вс: выходной</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-phone"/></svg>
+            <a href="tel:+375293720670">+375&nbsp;(29)&nbsp;372&#8209;06&#8209;70</a>
+          </li>
+        </ul>
+        <ul class="socials">
+          <li><a href="https://t.me/" aria-label="Telegram"><svg viewBox="0 0 36 36" aria-hidden="true"><use href="#i-telegram"/></svg></a></li>
+          <li><a href="viber://chat" aria-label="Viber"><svg viewBox="0 0 36 36" aria-hidden="true"><use href="#i-viber"/></svg></a></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</footer>
+<!-- /ПОДВАЛ -->
+
+
+<!-- ==========================================================================
+     МОДАЛЬНЫЕ ОКНА
+     Открываются ссылками #callback и #question, закрываются ссылкой на «#».
+     Общий блок для всех страниц.
+     ========================================================================== -->
+<section class="modal" id="callback" aria-labelledby="callback-title">
+  <a class="modal__dismiss" href="#" aria-label="Закрыть"></a>
+  <div class="modal__dialog">
+    <a class="modal__close" href="#" aria-label="Закрыть">×</a>
+
+    <form class="form" method="post" action="#">
+      <div class="form__head">
+        <h2 class="h2" id="callback-title">Обратный звонок</h2>
+        <p class="form__note">Оставьте свои контактные данные, и мы свяжемся с вами</p>
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="cb-name">Имя <sup>*</sup></label>
+        <input type="text" id="cb-name" name="name" placeholder="Иван Иванов" required>
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="cb-phone">Телефон <sup>*</sup></label>
+        <input type="tel" id="cb-phone" name="phone" placeholder="+375 (29) ___-__-__" required>
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="cb-comment">Комментарий</label>
+        <textarea id="cb-comment" name="comment"></textarea>
+      </div>
+
+      <div class="field field--file">
+        <label class="field__label" for="cb-file">Файл</label>
+        <div class="field__control">
+          <input type="file" id="cb-file" name="file">
+          <svg class="field__icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-download"/></svg>
+        </div>
+        <p class="field__hint">Максимальный размер одного файла: 15МБ</p>
+      </div>
+
+      <p class="field__hint">* — обязательное к заполнению поле</p>
+
+      <label class="checkbox">
+        <input type="checkbox" name="agree" required>
+        <span>Я подтверждаю, что ознакомлен(а) с <a href="privacy.html">Политикой конфиденциальности</a></span>
+      </label>
+
+      <button class="btn btn--primary btn--block" type="submit">Жду звонка</button>
+    </form>
+  </div>
+</section>
+
+<section class="modal" id="question" aria-labelledby="question-title">
+  <a class="modal__dismiss" href="#" aria-label="Закрыть"></a>
+  <div class="modal__dialog">
+    <a class="modal__close" href="#" aria-label="Закрыть">×</a>
+
+    <form class="form" method="post" action="#">
+      <div class="form__head">
+        <h2 class="h2" id="question-title">Задать вопрос</h2>
+        <p class="form__note">Оставьте сообщение, и мы с вами свяжемся</p>
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="q-name">Имя <sup>*</sup></label>
+        <input type="text" id="q-name" name="name" placeholder="Иван Иванов" required>
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="q-phone">Телефон <sup>*</sup></label>
+        <input type="tel" id="q-phone" name="phone" placeholder="+375 (29) ___-__-__" required>
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="q-text">Ваш вопрос <sup>*</sup></label>
+        <textarea id="q-text" name="question" required></textarea>
+      </div>
+
+      <p class="field__hint">* — обязательное к заполнению поле</p>
+
+      <label class="checkbox">
+        <input type="checkbox" name="agree" required>
+        <span>Я подтверждаю, что ознакомлен(а) с <a href="privacy.html">Политикой конфиденциальности</a></span>
+      </label>
+
+      <button class="btn btn--primary btn--block" type="submit">Жду звонка</button>
+    </form>
+  </div>
+</section>
+<!-- /МОДАЛЬНЫЕ ОКНА -->
+
+</body>
+</html>
